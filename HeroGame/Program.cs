@@ -35,8 +35,8 @@ int currentWallPercent = (int)Constants.WallPercent;
 
 while (true)
 {
-	rows = random.Next((int)Constants.MinRows, (int)Constants.MaxRows + 1);
-	cols = random.Next((int)Constants.MinCols, (int)Constants.MaxCols + 1);
+	rows = random.Next((int)Constants.MinRows, (int)Constants.MaxRows - 1);
+	cols = random.Next((int)Constants.MinCols, (int)Constants.MaxCols - 1);
 
 	field = new Cell[rows, cols];
 
@@ -149,7 +149,7 @@ while (true)
 				if (field[iHero, jHero - 1] == Cell.Empty || field[iHero, jHero - 1] == Cell.Portal)
 				{
 					jHero--;
-					jDog = random.Next(0, 5);
+					jDog = random.Next(1, cols - 1);
 				}
 
 				break;
@@ -158,7 +158,7 @@ while (true)
 				if (field[iHero - 1, jHero] == Cell.Empty || field[iHero - 1, jHero] == Cell.Portal )
 				{
 					iHero--;
-					iDog = random.Next(0, 5);
+					iDog = random.Next(1, cols - 1);
 				}
 
 				break;
@@ -167,7 +167,7 @@ while (true)
 				if (field[iHero, jHero + 1] == Cell.Empty || field[iHero, jHero + 1] == Cell.Portal )
 				{
 					jHero++;
-					jDog = random.Next(0, 5);
+					jDog = random.Next(1, cols - 1);
 				}
 
 				break;
@@ -176,7 +176,7 @@ while (true)
 				if (field[iHero + 1, jHero] == Cell.Empty || field[iHero + 1, jHero] == Cell.Portal )
 				{
 					iHero++;
-					iDog = random.Next(0, 5);
+					iDog = random.Next(1, cols - 1);
 				}
 
 				break;
