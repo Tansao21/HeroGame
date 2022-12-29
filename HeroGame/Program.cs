@@ -92,105 +92,140 @@ while (true)
 	}
 
 
-	heroInAdventure = true;
-	while (heroInAdventure)
+
+	//
+	bool dog;
+
+	dog = true;
+	while (dog)
 	{
 		Console.Clear();
 
 		Console.ResetColor();
 
 		Console.WriteLine($"Current Level = {currentLevel}");
+
 		for (int i = 0; i < rows; i++)
 		{
 			for (int j = 0; j < cols; j++)
 			{
+
 				if (i == iDog && j == jDog)
 				{
 					Console.ForegroundColor = ConsoleColor.Blue;
-				    Console.Write((char)Constants.DogSkin);
+					Console.Write((char)Constants.DogSkin);
 				}
-				if (i == iHero && j == jHero)
-				{
-					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.Write((char)Constants.HeroSkin);	
-				}
-				else
-				{
-					switch (field[i, j])
-					{
-						case Cell.Empty:
-							Console.ForegroundColor = ConsoleColor.Gray;
-							break;
-						case Cell.Wall:
-							Console.ForegroundColor = ConsoleColor.DarkRed;
-							break;
-						case Cell.Portal:
-							Console.ForegroundColor = ConsoleColor.Blue;
-							break;
-						case Cell.Bound:
-							Console.ForegroundColor = ConsoleColor.Green;
-							break;
-					}
-					Console.Write((char)field[i, j]);
-				}
+				Console.Write((char)field[i, j]);
 			}
 
 			Console.WriteLine();
 		}
 
-	
+		dog = false;
+	}
+	//
 
 
 
-		ConsoleKey key = Console.ReadKey(false).Key;
-		switch (key)
+		heroInAdventure = true;
+		while (heroInAdventure)
 		{
-			case ConsoleKey.A:
-				if (field[iHero, jHero - 1] == Cell.Empty || field[iHero, jHero - 1] == Cell.Portal)
+			Console.Clear();
+
+			Console.ResetColor();
+
+			Console.WriteLine($"Current Level = {currentLevel}");
+
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < cols; j++)
 				{
-					jHero--;
-					jDog = random.Next(1, cols - 1);
+
+					if (i == iDog && j == jDog)
+					{
+						Console.ForegroundColor = ConsoleColor.Blue;
+						Console.Write((char)Constants.DogSkin);
+					}
+
+					if (i == iHero && j == jHero)
+					{
+						Console.ForegroundColor = ConsoleColor.Yellow;
+						Console.Write((char)Constants.HeroSkin);
+					}
+					else
+					{
+						switch (field[i, j])
+						{
+							case Cell.Empty:
+								Console.ForegroundColor = ConsoleColor.Gray;
+								break;
+							case Cell.Wall:
+								Console.ForegroundColor = ConsoleColor.DarkRed;
+								break;
+							case Cell.Portal:
+								Console.ForegroundColor = ConsoleColor.Blue;
+								break;
+							case Cell.Bound:
+								Console.ForegroundColor = ConsoleColor.Green;
+								break;
+						}
+						Console.Write((char)field[i, j]);
+					}
 				}
 
-				break;
+				Console.WriteLine();
+			}
 
-			case ConsoleKey.W:
-				if (field[iHero - 1, jHero] == Cell.Empty || field[iHero - 1, jHero] == Cell.Portal )
-				{
-					iHero--;
-					iDog = random.Next(1, cols - 1);
-				}
+			ConsoleKey key = Console.ReadKey(false).Key;
+			switch (key)
+			{
+				case ConsoleKey.A:
+					if (field[iHero, jHero - 1] == Cell.Empty || field[iHero, jHero - 1] == Cell.Portal)
+					{
+						jHero--;
+						jDog = random.Next(1, cols - 1);
+					}
 
-				break;
+					break;
 
-			case ConsoleKey.D:
-				if (field[iHero, jHero + 1] == Cell.Empty || field[iHero, jHero + 1] == Cell.Portal )
-				{
-					jHero++;
-					jDog = random.Next(1, cols - 1);
-				}
+				case ConsoleKey.W:
+					if (field[iHero - 1, jHero] == Cell.Empty || field[iHero - 1, jHero] == Cell.Portal)
+					{
+						iHero--;
+						iDog = random.Next(1, cols - 1);
+					}
 
-				break;
+					break;
 
-			case ConsoleKey.S:
-				if (field[iHero + 1, jHero] == Cell.Empty || field[iHero + 1, jHero] == Cell.Portal )
-				{
-					iHero++;
-					iDog = random.Next(1, cols - 1);
-				}
+				case ConsoleKey.D:
+					if (field[iHero, jHero + 1] == Cell.Empty || field[iHero, jHero + 1] == Cell.Portal)
+					{
+						jHero++;
+						jDog = random.Next(1, cols - 1);
+					}
 
-				break;
+					break;
 
-			case ConsoleKey.R:
+				case ConsoleKey.S:
+					if (field[iHero + 1, jHero] == Cell.Empty || field[iHero + 1, jHero] == Cell.Portal)
+					{
+						iHero++;
+						iDog = random.Next(1, cols - 1);
+					}
+
+					break;
+
+				case ConsoleKey.R:
+					currentLevel = 0;
+					heroInAdventure = false;
+					break;
+			}
+
+			if (field[iHero, jHero] == Cell.Portal)
+			{
+				currentLevel++;
+				currentWallPercent += 5;
 				heroInAdventure = false;
-				break;
-		}
-
-		if (field[iHero, jHero] == Cell.Portal)
-		{
-			currentLevel++;
-			currentWallPercent += 5;
-			heroInAdventure = false;
+			}
 		}
 	}
-}
