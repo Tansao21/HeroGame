@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HeroGame
+﻿namespace HeroGame
 {
 	public enum Constants
 	{
@@ -17,7 +11,8 @@ namespace HeroGame
 		StartIHero = 1,
 		StartJHero = 1,
 
-		HeroSkin = 'H',
+		AliveHeroSkin = 'H',
+		DeadHeroSkin = '%',
 
 		StartIDog = 5,
 		StartJDog = 5,

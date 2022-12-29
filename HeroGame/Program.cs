@@ -18,214 +18,210 @@ int rows, cols;
 Cell[,] field;
 
 int iHero, jHero;
-int iDog, jDog;
+int hpHero = 1;
+char skinHero = (char)Constants.AliveHeroSkin;
+// int iDog, jDog;
 
 bool heroInAdventure;
 
 int currentWallPercent = (int)Constants.WallPercent;
 
-
-// int[,] dogs = new int[,]
-// {
-//     { 0, 0 },
-//     { 0, 0 }
-// };
-//
-// int iDog, jDog;
+int[,] dogs = new int[10, 2];
 
 while (true)
 {
-	rows = random.Next((int)Constants.MinRows, (int)Constants.MaxRows - 1);
-	cols = random.Next((int)Constants.MinCols, (int)Constants.MaxCols - 1);
+    rows = random.Next((int)Constants.MinRows, (int)Constants.MaxRows - 1);
+    cols = random.Next((int)Constants.MinCols, (int)Constants.MaxCols - 1);
 
-	field = new Cell[rows, cols];
+    field = new Cell[rows, cols];
 
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			field[i, j] = Cell.Empty;
-		}
-	}
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            field[i, j] = Cell.Empty;
+        }
+    }
 
-	for (int i = 0; i < rows; i++)
-	{
-		field[i, 0] = Cell.Bound;
-		field[i, cols - 1] = Cell.Bound;
-	}
+    for (int i = 0; i < rows; i++)
+    {
+        field[i, 0] = Cell.Bound;
+        field[i, cols - 1] = Cell.Bound;
+    }
 
-	for (int j = 0; j < cols; j++)
-	{
-		field[0, j] = Cell.Bound;
-		field[rows - 1, j] = Cell.Bound;
-	}
-
-
-	iHero = (int)Constants.StartIHero;
-	jHero = (int)Constants.StartJHero;
-
-	iDog = (int)Constants.StartIDog;
-	jDog = (int)Constants.StartJDog;
-
-	int iPortal, jPortal;
-	do
-	{
-		iPortal = random.Next(1, rows - 1);
-		jPortal = random.Next(1, cols - 1);
-	} while (iPortal == iHero && jPortal == jHero);
-
-	field[iPortal, jPortal] = Cell.Portal;
-
-	int countWalls = (int)((rows - 2) * (cols - 2) * currentWallPercent / 100.0);
-	for (int i = 0; i < countWalls; i++)
-	{
-		int iWall, jWall;
-		do
-		{
-			iWall = random.Next(1, rows - 1);
-			jWall = random.Next(1, cols - 1);
-		} while (iWall == iHero && jWall == jHero
-				 || field[iWall, jWall] == Cell.Portal
-				 || field[iWall, jWall] == Cell.Wall);
-
-		field[iWall, jWall] = Cell.Wall;
-	}
+    for (int j = 0; j < cols; j++)
+    {
+        field[0, j] = Cell.Bound;
+        field[rows - 1, j] = Cell.Bound;
+    }
 
 
+    iHero = (int)Constants.StartIHero;
+    jHero = (int)Constants.StartJHero;
 
-	//
-	bool dog;
+    for (int k = 0; k < dogs.GetLength(0); k++)
+    {
+        dogs[k, 0] = random.Next(2, rows - 2);
+        dogs[k, 1] = random.Next(2, cols - 2);
+    }
 
-	dog = true;
-	while (dog)
-	{
-		Console.Clear();
+    // iDog = (int)Constants.StartIDog;
+    // jDog = (int)Constants.StartJDog;
 
-		Console.ResetColor();
+    int iPortal, jPortal;
+    do
+    {
+        iPortal = random.Next(1, rows - 1);
+        jPortal = random.Next(1, cols - 1);
+    } while (iPortal == iHero && jPortal == jHero);
 
-		Console.WriteLine($"Current Level = {currentLevel}");
+    field[iPortal, jPortal] = Cell.Portal;
 
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < cols; j++)
-			{
+    int countWalls = (int)((rows - 2) * (cols - 2) * currentWallPercent / 100.0);
+    for (int i = 0; i < countWalls; i++)
+    {
+        int iWall, jWall;
+        do
+        {
+            iWall = random.Next(1, rows - 1);
+            jWall = random.Next(1, cols - 1);
+        } while (iWall == iHero && jWall == jHero
+                 || field[iWall, jWall] == Cell.Portal
+                 || field[iWall, jWall] == Cell.Wall);
 
-				if (i == iDog && j == jDog)
-				{
-					Console.ForegroundColor = ConsoleColor.Blue;
-					Console.Write((char)Constants.DogSkin);
-				}
-				Console.Write((char)field[i, j]);
-			}
+        field[iWall, jWall] = Cell.Wall;
+    }
 
-			Console.WriteLine();
-		}
+    heroInAdventure = true;
+    while (heroInAdventure)
+    {
+        Console.Clear();
 
-		dog = false;
-	}
-	//
+        Console.ResetColor();
 
+        Console.WriteLine($"Current Level = {currentLevel} HP hero = {hpHero}");
 
+        bool findDog;
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                findDog = false;
+                for (int k = 0; k < dogs.GetLength(0); k++)
+                {
+                    if (i == dogs[k, 0] && j == dogs[k, 1])
+                    {
+                        findDog = true;
+                        break;
+                    }
+                }
 
-		heroInAdventure = true;
-		while (heroInAdventure)
-		{
-			Console.Clear();
+                if (findDog)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write((char)Constants.DogSkin);
+                }
+                else if (i == iHero && j == jHero)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(skinHero);
+                }
+                else
+                {
+                    switch (field[i, j])
+                    {
+                        case Cell.Empty:
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                        case Cell.Wall:
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            break;
+                        case Cell.Portal:
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            break;
+                        case Cell.Bound:
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            break;
+                    }
 
-			Console.ResetColor();
+                    Console.Write((char)field[i, j]);
+                }
+            }
 
-			Console.WriteLine($"Current Level = {currentLevel}");
+            Console.WriteLine();
+        }
 
-			for (int i = 0; i < rows; i++)
-			{
-				for (int j = 0; j < cols; j++)
-				{
+        ConsoleKey key = Console.ReadKey(false).Key;
+        switch (key)
+        {
+            case ConsoleKey.A:
+                if (field[iHero, jHero - 1] == Cell.Empty || field[iHero, jHero - 1] == Cell.Portal)
+                {
+                    jHero--;
+                    //jDog = random.Next(1, cols - 1);
+                }
 
-					if (i == iDog && j == jDog)
-					{
-						Console.ForegroundColor = ConsoleColor.Blue;
-						Console.Write((char)Constants.DogSkin);
-					}
+                break;
 
-					if (i == iHero && j == jHero)
-					{
-						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.Write((char)Constants.HeroSkin);
-					}
-					else
-					{
-						switch (field[i, j])
-						{
-							case Cell.Empty:
-								Console.ForegroundColor = ConsoleColor.Gray;
-								break;
-							case Cell.Wall:
-								Console.ForegroundColor = ConsoleColor.DarkRed;
-								break;
-							case Cell.Portal:
-								Console.ForegroundColor = ConsoleColor.Blue;
-								break;
-							case Cell.Bound:
-								Console.ForegroundColor = ConsoleColor.Green;
-								break;
-						}
-						Console.Write((char)field[i, j]);
-					}
-				}
+            case ConsoleKey.W:
+                if (field[iHero - 1, jHero] == Cell.Empty || field[iHero - 1, jHero] == Cell.Portal)
+                {
+                    iHero--;
+                    //iDog = random.Next(1, rows - 1);
+                }
 
-				Console.WriteLine();
-			}
+                break;
 
-			ConsoleKey key = Console.ReadKey(false).Key;
-			switch (key)
-			{
-				case ConsoleKey.A:
-					if (field[iHero, jHero - 1] == Cell.Empty || field[iHero, jHero - 1] == Cell.Portal)
-					{
-						jHero--;
-						jDog = random.Next(1, cols - 1);
-					}
+            case ConsoleKey.D:
+                if (field[iHero, jHero + 1] == Cell.Empty || field[iHero, jHero + 1] == Cell.Portal)
+                {
+                    jHero++;
+                    //jDog = random.Next(1, cols - 1);
+                }
 
-					break;
+                break;
 
-				case ConsoleKey.W:
-					if (field[iHero - 1, jHero] == Cell.Empty || field[iHero - 1, jHero] == Cell.Portal)
-					{
-						iHero--;
-						iDog = random.Next(1, cols - 1);
-					}
+            case ConsoleKey.S:
+                if (field[iHero + 1, jHero] == Cell.Empty || field[iHero + 1, jHero] == Cell.Portal)
+                {
+                    iHero++;
+                    //iDog = random.Next(1, rows - 1);
+                }
 
-					break;
+                break;
 
-				case ConsoleKey.D:
-					if (field[iHero, jHero + 1] == Cell.Empty || field[iHero, jHero + 1] == Cell.Portal)
-					{
-						jHero++;
-						jDog = random.Next(1, cols - 1);
-					}
+            case ConsoleKey.R:
+                currentLevel = 0;
+                heroInAdventure = false;
+                break;
+        }
 
-					break;
+        for (int k = 0; k < dogs.GetLength(0); k++)
+        {
+            dogs[k, 0] = random.Next(2, rows - 2);
+            dogs[k, 1] = random.Next(2, cols - 2);
+        }
 
-				case ConsoleKey.S:
-					if (field[iHero + 1, jHero] == Cell.Empty || field[iHero + 1, jHero] == Cell.Portal)
-					{
-						iHero++;
-						iDog = random.Next(1, cols - 1);
-					}
+        if (field[iHero, jHero] == Cell.Portal)
+        {
+            currentLevel++;
+            //currentWallPercent += 5;
+            heroInAdventure = false;
+        }
 
-					break;
+        for (int k = 0; k < dogs.GetLength(0); k++)
+        {
+            if (iHero == dogs[k, 0] && jHero == dogs[k, 1])
+            {
+                hpHero--;
+                break;
+            }
+        }
 
-				case ConsoleKey.R:
-					currentLevel = 0;
-					heroInAdventure = false;
-					break;
-			}
-
-			if (field[iHero, jHero] == Cell.Portal)
-			{
-				currentLevel++;
-				currentWallPercent += 5;
-				heroInAdventure = false;
-			}
-		}
-	}
+        if (hpHero == 0)
+        {
+            skinHero = (char)Constants.DeadHeroSkin;
+        }
+        
+    }
+}
